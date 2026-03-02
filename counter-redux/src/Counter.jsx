@@ -1,13 +1,27 @@
 import React, { useState } from 'react'
 import { Button } from 'react-bootstrap'  // type Button take second suggestion ie, react-bootstrap.
 import { useDispatch, useSelector } from 'react-redux'
-import { increment } from './Redux/slice/counterSlice'
+import { decrement, handleByIncrement, increment, reset } from './Redux/slice/counterSlice'
+
 
 
 function Counter() {
 
 const count = useSelector((state)=>state.counterReducer.count)
 const dispatch = useDispatch()
+
+const[amount,setAmount]=useState("")
+console.log(amount);
+
+const incrementByAmount=()=>{
+  if(amount==""){
+    alert("please fill missing fields")
+  }else{
+    dispatch(handleByIncrement(Number(amount)))
+  }
+  setAmount("")
+}
+
   
   
 
@@ -19,13 +33,14 @@ const dispatch = useDispatch()
 
         <div className='d-flex justify-content-around mt-5'>
           <Button variant="success" onClick={()=>dispatch(increment())}>Increment</Button>
-          <Button variant="danger">Reset</Button>
-          <Button variant="warning">Decrement</Button>
+          <Button variant="danger" onClick={()=>dispatch(reset())}>Reset</Button>
+          <Button variant="warning" onClick={()=>dispatch(decrement())}>Decrement</Button>
         </div>
 
         <div className='d-flex mt-5 p-3'>
-            <input type="text" className='form-control' placeholder='enter amount' />
-            <Button className='btn btn-primary m-2'>Increment By Amount</Button>
+            <input type="text" className='form-control' placeholder='enter amount'
+            onChange={e=>setAmount(e.target.value)} value={amount||""} />
+            <Button className='btn btn-primary m-2' onClick={incrementByAmount}>Increment By Amount</Button>
         </div>
       </div>
     </div>
