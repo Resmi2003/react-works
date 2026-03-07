@@ -7,19 +7,19 @@ import { decrement, handleByIncrement, increment, reset } from './Redux/slice/co
 
 function Counter() {
 
-const count = useSelector((state)=>state.counterReducer.count)
-const dispatch = useDispatch()
+const count = useSelector((state)=>state.counterReducer.count)  // counterReducer means counterSlice because it is assigned like that in counterSlice.js page and .count means count inside counterSlice in counterSlice.js page.
+const dispatch = useDispatch()      // button clickiyumbo action executiyan venditanu useDispatch.
 
-const[amount,setAmount]=useState("")
-console.log(amount);
+const[amount,setAmount]=useState("")     // setAmount updates value
+console.log(amount);     // so the amount we enter in input box will appear in console
 
 const incrementByAmount=()=>{
   if(amount==""){
     alert("please fill missing fields")
   }else{
-    dispatch(handleByIncrement(Number(amount)))
+    dispatch(handleByIncrement(Number(amount)))    // if Number not put, then input box value and count value just concatinate only because we put "" in useState. so for adding that numbers we used Number. so value from input box and count will add each other.
   }
-  setAmount("")
+  setAmount("")     // to empty the input field when pressed Increment By Amount button.
 }
 
   
