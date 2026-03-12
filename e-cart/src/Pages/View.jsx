@@ -1,29 +1,76 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import Header from '../Components/Header'
+import { useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { addToWishlist } from '../Redux/slice/wishListSlice'
+import { addToCart } from '../Redux/slice/cartSlice'
+
 
 
 function View() {
+  const dispatch = useDispatch()
+  const {id} = useParams()  // used to get path related informations from url
+  const[product,setProduct]=useState({})
+  const {wishlist} = useSelector(state=>state.wishlistReducer)
+  const cart = useSelector(state=>state.cartReducer)
+  
+
+  useEffect(()=>{
+    const allProducts = JSON.parse(localStorage.getItem("allProducts"))
+    setProduct(allProducts.find(item=>item.id==id))
+
+  },[])
+
+  // console.log(product);
+  const handleWishList =(product)=>{
+      const existingProduct = wishlist.find(item=>item.id==product.id)
+  
+      if(existingProduct){
+        alert("item already exist")
+      }else{
+        dispatch(addToWishlist(product))
+        alert("item added")
+      }
+  
+    }
+
+
+    const handleCart = (product)=>{
+        const existingProduct = cart.find(item=>item.id==product.id)
+        if(existingProduct){
+          dispatch(addToCart(product))
+          alert("items added")
+        }else{
+          dispatch(addToCart(product))
+          alert("item added")
+        }
+      }
+
+
+  
+
   return (
     <>
+    {/* header selector put */}
     <Header/>
     <div style={{marginTop:"200px"}}>
       <div className="row w-100 container">
         <div className="col-lg-4 mt-5">
-          <img src="https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp" alt="" />
+          <img src={product.thumbnail} alt="" />
         </div>
 
         <div className="col-lg-2">
         </div>
 
         <div className="col-lg-6 mt-5">
-          <p>pid:1</p>
-          <h1>title</h1>
-          <p>description</p>
-          <h3>Price: <span className='text-danger'>525</span></h3>
+          <p>pid:{product.id}</p>
+          <h1>{product.title}</h1>
+          <p>{product.description}</p>
+          <h3>Price: <span className='text-danger'>{product.price}</span></h3>
           <div className="d-flex justify-content-between">
-            <Button className="btn btn-info rounded">Wishlist <i className="fa-solid fa-heart text-danger"></i></Button>
-            <Button className="btn btn-info rounded">Cart <i className="fa-solid fa-cart-shopping text-warning"></i></Button>
+            <Button className="btn btn-info rounded" onClick={()=>handleWishList(product)}>Wishlist <i className="fa-solid fa-heart text-danger"></i></Button>
+            <Button className="btn btn-info rounded" onClick={()=>handleCart(product)}>Cart <i className="fa-solid fa-cart-shopping text-warning"></i></Button>
           </div>
         </div>
 

@@ -23,5 +23,5 @@ const counterSlice = createSlice({
 })
 
 
-export const{increment,decrement,reset,handleByIncrement} = counterSlice.actions
-export default counterSlice.reducer
+export const{increment,decrement,reset,handleByIncrement} = counterSlice.actions  // counterSlice.actions → exported so components can dispatch actions
+export default counterSlice.reducer  // counterSlice.reducer → exported so store can update state when actions happen

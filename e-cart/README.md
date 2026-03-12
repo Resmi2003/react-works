@@ -6,3 +6,4 @@
 6 - create routing using router dom
 7 - create designs
 8 - install redux and redux toolkit
+9 - install axios
