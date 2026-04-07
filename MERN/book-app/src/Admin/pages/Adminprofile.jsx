@@ -5,10 +5,10 @@ import Adminsidebar from '../Components/Adminsidebar'
 function Adminprofile() {
   return (
     <>
-    <Adminheader/>
+      <Adminheader />
       <div className='md:grid grid-cols-5 gap-2'>
         <div className='col-span-1'>
-          <Adminsidebar/>
+          <Adminsidebar />
         </div>
         <div className='col-span-4'>
           <h1 className='text-3xl font-bold text-center my-5'>Settings</h1>
@@ -19,25 +19,26 @@ function Adminprofile() {
             </div>
             <div className='rounded bg-blue-100 p-10 flex justify-center items-center flex-col mt-10 md:mt-10'>
               <label htmlFor="adminPic">
-                      <input type="file" name='' id='adminPic' className='hidden'/>
-                      <img src="https://img.freepik.com/premium-vector/man-character_665280-46970.jpg" width={'200px'} height={'200px'} alt="admin profile" />
-                    </label>
-                    <div className='mb-3 w-full'>
-                      <input type="text" className='p-2 bg-white border border-gray-200 text-black w-full rounded placeholder-gray-600' placeholder='Username' />
-                    </div>
-                    <div className='mb-3 w-full'>
-                      <input type="text" className='p-2 bg-white border border-gray-200 text-black w-full rounded placeholder-gray-600' placeholder='Username' />
-                    </div>
-                    <div className='mb-3 w-full mt-20'>
-                      <input type="text" className='p-2 bg-white border border-gray-200 text-black w-full rounded placeholder-gray-600' placeholder='Username' />
-                    </div>
-                    <div className='mb-3 w-full flex justify-evenly'>
-                      <input type="text" className='p-2 bg-white border border-gray-200 text-black w-full rounded placeholder-gray-600' placeholder='Username' />
-                    </div>
+                <input type="file" name='' id='adminPic' className='hidden' />
+                <img src="https://img.freepik.com/premium-vector/man-character_665280-46970.jpg" width={'200px'} height={'200px'} alt="admin profile" />
+              </label>
+              <div className='mb-3 w-full mt-20'>
+                <input type="text" className='p-2 bg-white border border-gray-200 text-black w-full rounded placeholder-gray-600' placeholder='Username' />
+              </div>
+              <div className='mb-3 w-full'>
+                <input type="text" className='p-2 bg-white border border-gray-200 text-black w-full rounded placeholder-gray-600' placeholder='Password' />
+              </div>
+              <div className='mb-3 w-full'>
+                <input type="text" className='p-2 bg-white border border-gray-200 text-black w-full rounded placeholder-gray-600' placeholder='Confirm Password' />
+              </div>
+              <div className='my-3 w-full flex justify-evenly'>
+                <button className='bg-orange-600 text-white px-4 py-2 rounded'>RESET</button>
+                <button className='bg-green-900 text-white px-4 py-2 rounded'>UPDATE</button>
+              </div>
             </div>
           </div>
         </div>
-        </div>
+      </div>
     </>
   )
 }

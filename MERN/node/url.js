@@ -1,0 +1,13 @@
+const url = require('url')
+
+const siteUrl = "https://accounts.google.com/v3/signin/accountchooser?_x_zm_rhtaid=412&_x_zm_rtaid=hnG-orKvROq5Uvi25zqR8Q.1774246557303.e0c19cfe83595b4c8c5e671fdda6c187&access_type=offline&client_id=849883241272-ed6lnodi1grnoomiuknqkq2rbvd2udku.apps.googleusercontent.com&prompt=consent&redirect_uri=https%3A%2F%2Fzoom.us%2Fgoogle%2Foauth&response_type=code&scope=profile+email&state=YzdROTlmSUtUNG1TblZmTnRpQzVWUSxjbGllbnRfZ29vZ2xlX2xvZ2lu&dsh=S-771445868%3A1774246557570463&o2v=2&service=lso&flowName=GeneralOAuthFlow&opparams=%253F_x_zm_rhtaid%253D412%2526_x_zm_rtaid%253DhnG-orKvROq5Uvi25zqR8Q.1774246557303.e0c19cfe83595b4c8c5e671fdda6c187&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAOUfcAyHHClKaXms1_uew324DQBpkklQAatL29WhvQdyXaKkYS5DyPjZ3U-Kt0lTTymgqx_iTeSM3-XCaH8Cq8RObxY1XALYyGLf-B8fGwr1S5CK-wAHVTzMUvqmGNPrCLviBmMfV2Ntv0xESrZwyWdgrP-0TZS_ucF3pIodcMzZaCNop1XUPRZC6EsNCVcYeD-zvIDnNW5IwUZrSTkyeSxfg0dSBz_2QSYNL3zEdxiRPuRyoujI97x8QTal2OAJa8sFrPQ6cXzKVPvuszvQjM65zfEoMCUGw9VGfCC64jD_SQc2hBPQSwQ-t6iq_iniJS6WSCRPDTOvLNZthsYpyjfOhxkPDCb64Npa1_7M31rQABolc19Lm4KWnFAbHCYIQhK-YoACE-3q83pVxaVGFPmn_7tUG7QY2mQLMNFDyobAwjNih8EApSTHL9Zv6x6qPVpTgxbFozr08kL3J1CmoBwy9vAoA%26flowName%3DGeneralOAuthFlow%26as%3DS-771445868%253A1774246557570463%26client_id%3D849883241272-ed6lnodi1grnoomiuknqkq2rbvd2udku.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fconsent%23&app_domain=https%3A%2F%2Fzoom.us'"
+
+const parseUrl = url.parse(siteUrl,true)
+
+console.log(parseUrl.host);
+console.log(parseUrl.path);
+console.log(parseUrl.query);
+console.log(parseUrl.query.gid);
+
+
+

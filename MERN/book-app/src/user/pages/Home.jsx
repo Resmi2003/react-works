@@ -1,9 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import Header from "../components/Header";
 import { FaInstagram, FaTwitter, FaFacebookF, FaLinkedinIn } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+
 
 function Home() {
+
+  const[searchKey,setSearchKey]=useState("")
+  const navigate = useNavigate()
+
+  const handleSearch=()=>{
+    if(!searchKey){
+      toast.warning("Please input Book title here!!")
+    }else if(!sessionStorage.getItem("token")){
+      toast.warning("Please Login!!")
+      setTimeout(() => {
+        navigate('/login')
+      }, 2000);
+    }else if(sessionStorage.getItem("token") && searchKey){
+      navigate('/all-books')
+    }else{
+      toast.error("Something went wrong!!!")
+    }
+  }
+
+
+
+
   return (
     <div>
 
@@ -33,14 +58,14 @@ function Home() {
           {/* Search */}
           <div className="flex items-center bg-white rounded-full overflow-hidden w-[420px] mt-10 shadow">
 
-            <input
+            <input onChange={e=>setSearchKey(e.target.value)}
               type="text"
               placeholder="Search Books"
               className="flex-1 pl-10 py-3 outline-none border-none text-gray-700"
             />
 
-            <button className="px-6 text-gray-600 text-lg">
-              <FiSearch />
+            <button className="px-6 text-gray-600 text-lg cursor-pointer">
+              <FiSearch onClick={handleSearch}  />
             </button>
 
           </div>
@@ -286,6 +311,21 @@ function Home() {
   </div>
 
 </footer>
+
+
+<ToastContainer
+        position="top-right"
+        autoClose={5000}
+        // hideProgressBar={false}
+        // newestOnTop={false}
+        // closeOnClick={false}
+        // rtl={false}
+        // pauseOnFocusLoss
+        // draggable
+        // pauseOnHover
+        theme="colored"
+        // transition={Bounce}
+      />
 
 
       

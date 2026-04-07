@@ -1,0 +1,80 @@
+const users = require('../model/userModel');
+const jwt = require('jsonwebtoken')
+
+
+// register
+exports.registerController=async(req,res)=>{
+    console.log("inside user register controller");
+    const{username,email,password}=req.body
+    // console.log(username,email,password);
+    try{
+        const existingUser = await users.findOne({email})
+        if(existingUser){
+            res.status(402).json("user already exists")
+        }else{
+            const newUser = await users.create({
+                username,email,password
+            })
+            res.status(200).json(newUser)
+        }
+    }catch(error){
+        console.log(error);
+        res.status(500).json(error)
+    }
+    // res.status(200).json("register request received")
+    
+    
+}
+
+
+// login
+exports.loginController = async(req,res)=>{
+    console.log("inside user login controller");
+    const{email,password}=req.body
+    try{
+        const existingUser = await users.findOne({email})
+        if(existingUser){
+            if(password==existingUser.password){
+                const token = jwt.sign({userMail:existingUser.email,role:existingUser.role},process.env.jwtSecret)
+                res.status(200).json({user:existingUser,token})
+            }else{
+                res.status(401).json("incorrect Email/Password")
+            }
+        }else{
+            res.status(400).json("Account does not exist")
+        }
+
+    }catch(error){
+        console.log(error);
+        res.status(500).json(error)
+        
+    }
+    
+}
+
+// googleLogin Controller
+exports.googleLoginController = async (req, res) => {
+    console.log("inside user google login controller");
+    const { email, password, username, picture } = req.body
+    try {
+        const existingUser = await users.findOne({ email })
+        if(existingUser) {
+            // login
+            const token = jwt.sign({ userMail: existingUser.email, role: existingUser.role }, process.env.jwtSecret)
+            res.status(200).json({ user: existingUser, token})
+        } else {
+            // register
+            const newUser = await users.create({
+                username, email, password, picture
+            })
+            const token = jwt.sign({ userMail: newUser.email, role: newUser.role}, process.env.jwtSecret)
+            res.status(200).json({ user: newUser, token})
+        }
+
+    } catch(error) {
+        console.log(error);
+        res.status(500).json(error)
+        
+    }
+    
+}
