@@ -2,6 +2,9 @@
 
 const express = require('express')
 const userController = require('../controller/userController')
+const bookController = require('../controller/bookController')
+const jwtMiddleware = require('../middleware/jwtMiddleware')
+const multerMiddleware = require('../middleware/multerMiddleware')
 
 const router = new express.Router()
 
@@ -13,6 +16,30 @@ router.post('/login',userController.loginController)
 
 // google-login
 router.post('/google-login',userController.googleLoginController)
+
+// home-books
+router.get('/home-books',bookController.getHomeBooksController)
+
+// --------Authorized users routes
+// addBook
+router.post('/user/add-book',jwtMiddleware,multerMiddleware.array('uploadImg',3),bookController.addBookController)
+
+// getAllUserBook
+router.get('/all-books',jwtMiddleware,bookController.getAllUserBookController)
+
+// getUserProfileBooks
+router.get('/user-books',jwtMiddleware,bookController.getUserProfileBookController)
+
+// getUserPurchasedBooks
+router.get('/user-books/buy',jwtMiddleware,bookController.getPurchaseBookController)
+
+// viewBook
+router.get('/view/:id',jwtMiddleware,bookController.viewBookController)
+
+// updateUser
+router.put('/user/:id/edit',jwtMiddleware,multerMiddleware.single('picture'),userController.editUserController)
+
+// 
 
 
 

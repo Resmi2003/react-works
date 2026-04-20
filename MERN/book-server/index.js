@@ -19,6 +19,9 @@ bookStoreServer.use(express.json())    // express.json() is used as middleware i
 // user router in server app
 bookStoreServer.use(router)
 
+// handle image from server
+bookStoreServer.use('/uploads',express.static('./uploads'))
+
 
 // create port for server to available on web
 

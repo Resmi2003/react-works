@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { CiTwitter, CiUser } from 'react-icons/ci'
 import { FaFacebook, FaInstagram } from 'react-icons/fa'
 import { FaBarsProgress } from 'react-icons/fa6'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { server_url } from '../../../services/server_url'
 
 function Header() {
 
@@ -11,6 +12,7 @@ function Header() {
   const[token,setToken]=useState("")
   const[dp,setDp]=useState("")
   const[dropDown,setDropDown]=useState(false)
+  const navigate = useNavigate()
 
 
   useEffect(()=>{
@@ -21,6 +23,17 @@ function Header() {
       setDp(user.picture)
     }
   },[token])
+
+  // console.log(dp);
+
+  const logout = ()=>{
+    sessionStorage.clear()
+    setToken("")
+    setDp("")
+    setDropDown(false)
+    navigate('/')
+  }
+  
 
 
   return (
@@ -53,16 +66,16 @@ function Header() {
         :
         <div className="relative inline-block text-left">
             <button onClick={()=>setDropDown(!dropDown)}  className="w-full bg-white px-3 py-2  shadow-xs hover:bg-gray-50">
-                <img width={'40px'} height={'40px'} style={{borderRadius:'50%'}} className="mx-2" src={dp?dp:"http://pluspng.com/img-png/user-png-icon-male-user-icon-512.png"} alt="user" />
+                <img width={'40px'} height={'40px'} style={{borderRadius:'50%'}} className="mx-2" src={dp=="" ? "https://cdn-icons-png.flaticon.com/512/149/149071.png":dp.startsWith('https://lh3.googleusercontent.com/')?dp:`${server_url}/uploads/${dp}`} alt="user" />
             </button>
             {dropDown && <div className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden">
               <div className="py-1">
                 <Link className="block px-4 py-2 text-sm text-gray-700" to={'/profile'}>  Profile </Link>
-                <button  className="block px-4 py-2 text-sm text-gray-700"> Logout</button>
+                <button onClick={logout}  className="block px-4 py-2 text-sm text-gray-700"> Logout</button>
               </div>
             </div>}
           </div>
-}
+  }
       </div>
 
     </div>
@@ -82,12 +95,12 @@ function Header() {
 
         <div className="relative inline-block text-left">
             <button onClick={()=>setDropDown(!dropDown)}  className="w-full  px-3 py-2 bg-gray-500 shadow-xs hover:bg-gray-50 rounded">
-               <img width={'40px'} height={'40px'} style={{borderRadius:'50%'}} className="mx-2" src={dp?dp:"http://pluspng.com/img-png/user-png-icon-male-user-icon-512.png"} alt="user" />
+               <img width={'40px'} height={'40px'} style={{borderRadius:'50%'}} className="mx-2" src={dp=="" ? "https://cdn-icons-png.flaticon.com/512/149/149071.png":dp.startsWith('https://lh3.googleusercontent.com/')?dp:`${server_url}/uploads/${dp}`} alt="user" />
             </button>
           {dropDown && <div className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden">
               <div className="py-1">
                 <Link className="block px-4 py-2 text-sm text-gray-700" to={'/profile'}> Profile </Link>
-                <button className="block px-4 py-2 text-sm text-gray-700"> Logout</button>
+                <button onClick={logout} className="block px-4 py-2 text-sm text-gray-700"> Logout</button>
               </div>
             </div>}
             

@@ -54,8 +54,11 @@ exports.loginController = async(req,res)=>{
 
 // googleLogin Controller
 exports.googleLoginController = async (req, res) => {
+    
     console.log("inside user google login controller");
     const { email, password, username, picture } = req.body
+    console.log( email, password, username, picture);
+    
     try {
         const existingUser = await users.findOne({ email })
         if(existingUser) {
@@ -64,9 +67,11 @@ exports.googleLoginController = async (req, res) => {
             res.status(200).json({ user: existingUser, token})
         } else {
             // register
+            
             const newUser = await users.create({
                 username, email, password, picture
             })
+            
             const token = jwt.sign({ userMail: newUser.email, role: newUser.role}, process.env.jwtSecret)
             res.status(200).json({ user: newUser, token})
         }
@@ -76,5 +81,27 @@ exports.googleLoginController = async (req, res) => {
         res.status(500).json(error)
         
     }
+    
+}
+
+// editUserController
+exports.editUserController = async(req,res)=>{
+    console.log("inside user edit User Controller");
+    const email = req.payload
+    const {id} = req.params
+    const{password,username,bio,role,picture} = req.body
+    const updatePicture = req.file?req.file.filename:picture
+    console.log(id,email,password,username,bio,role,picture,updatePicture);
+
+    try{
+        const updateUser = await users.findByIdAndUpdate({_id:id},{email,password,username,bio,role,picture:updatePicture},{new:true})
+        res.status(200).json(updateUser)
+
+    }catch(error){
+        console.log(error);
+        res.status(500).json(error)
+        
+    }
+    
     
 }

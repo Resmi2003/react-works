@@ -1,9 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEye, FaCamera, FaTimes, FaArrowLeft } from "react-icons/fa";
 import Header from "../components/Header";
+import { useParams } from "react-router-dom";
+import { viewBookAPI } from "../../../services/allAPI";
+import { server_url } from "../../../services/server_url";
 
 function Viewbook() {
   const [showModal, setShowModal] = useState(false);
+  const {id} = useParams()
+  const[book,setBook] = useState({})
+
+  useEffect(()=>{
+    viewBooks()
+  },[])
+
+  const viewBooks = async()=>{
+    const token = sessionStorage.getItem("token")
+    if(token){
+      const reqHeader = {
+        "Authorization": `Bearer ${token}`
+      }
+      const result = await viewBookAPI(id,reqHeader)
+      if(result.status==200){
+        setBook(result.data)
+      }else{
+        console.log(result);
+      }
+    }else{
+      console.log("error");
+      
+    }
+  }
+
+  console.log(book);
+  
 
   return (
      
@@ -19,7 +49,7 @@ function Viewbook() {
         {/* IMAGE */}
         <div className="w-[260px] h-full">
           <img
-            src="https://images-na.ssl-images-amazon.com/images/I/81h2gWPTYJL.jpg"
+            src={book?.imageUrl}
             alt=""
             className="w-full h-full object-cover rounded-l"
           />
@@ -31,30 +61,26 @@ function Viewbook() {
           <div>
             {/* CENTER TITLE */}
             <div className="text-center">
-              <h2 className="text-2xl font-semibold">Becoming</h2>
+              <h2 className="text-2xl font-semibold">{book?.title}</h2>
               <p className="text-blue-500 text-sm mb-4">
-                - Michelle Obama
+                {book?.author}
               </p>
             </div>
 
             {/* DETAILS */}
             <div className="grid grid-cols-2 gap-y-2 text-sm">
-              <p>Publisher : Crown (North America)</p>
-              <p>Language : English</p>
-              <p>Seller Mail : neel@gmail.com</p>
-              <p>No. of pages : 448</p>
-              <p>Real Price : ₹ 25</p>
-              <p>ISBN : 978-1-5247-6313-8</p>
+              <p className="font-bold">Publisher : {book?.publisher}</p>
+              <p className="font-bold">Language : {book?.language}</p>
+              <p className="font-bold">Seller Mail : {book?.sellerMail}</p>
+              <p className="font-bold">No. of pages : {book?.pages}</p>
+              <p className="font-bold">Real Price : ${book?.price}</p>
+              <p className="font-bold">ISBN : {book?.isbn}</p>
+              <p className="font-bold">Category : {book?.category}</p>
             </div>
 
             {/* DESCRIPTION */}
             <p className="text-sm mt-4 text-gray-600 leading-relaxed">
-              Becoming is a deeply personal memoir by Michelle Obama,
-              chronicling her journey from her childhood on the South Side
-              of Chicago to her years as a working professional balancing
-              career and family. It also reflects her time as the First Lady
-              of the United States, where she inspired millions through her
-              advocacy for education, health, and empowerment.
+              {book?.abstract}
             </p>
           </div>
 
@@ -103,17 +129,24 @@ function Viewbook() {
                 <p>Camera click of the book in the hand of seller</p>
               </div>
 
+
+            {/* duplicate images */}
               <div className="flex gap-3">
-                <img
+
+                { book?.uploadImg?.length>0?book.uploadImg.map((index,filename)=>(<img key={index} 
+                  src={`${server_url}/uploads/${filename}`}
+                  className="w-1/2 h-44 object-cover rounded"
+                  alt="book images"
+                /> )) : <p>Nothing to display</p>
+                }
+                
+
+
+                {/* <img
                   src="https://images-na.ssl-images-amazon.com/images/I/81h2gWPTYJL.jpg"
                   className="w-1/2 h-44 object-cover rounded"
                   alt=""
-                />
-                <img
-                  src="https://images-na.ssl-images-amazon.com/images/I/81h2gWPTYJL.jpg"
-                  className="w-1/2 h-44 object-cover rounded"
-                  alt=""
-                />
+                /> */}
               </div>
 
             </div>
@@ -121,6 +154,10 @@ function Viewbook() {
         </div>
       )}
     </div>
+
+    {/* <button onClick={()=>setShowModal(false)} className="text-gray-400">
+    close
+    </button> */}
 
     </>
   );

@@ -90,6 +90,8 @@ function Auth({ register }) {
     const decode = jwtDecode(credentialResponse.credential)
     console.log(decode.email, decode.name, decode.picture);
     const result = await googleLoginAPI({ email: decode.email, password: 'googlepassword', username: decode.name, picture: decode.picture })
+    console.log(result);
+    
     if (result.status == 200) {
       toast.success("user logined")
       sessionStorage.setItem("token", result.data.token)

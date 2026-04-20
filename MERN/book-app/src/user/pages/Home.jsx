@@ -1,15 +1,23 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import Header from "../components/Header";
 import { FaInstagram, FaTwitter, FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import { getHomeBooksAPI } from "../../../services/allAPI";
+import { searchContext } from "../../ContextAPI/ShareContext";
 
 
 function Home() {
 
-  const[searchKey,setSearchKey]=useState("")
+  // const[searchKey,setSearchKey]=useState("")
+  const{searchKey,setSearchKey} = useContext(searchContext)
   const navigate = useNavigate()
+  const[homeBooks,setHomeBooks] = useState([])
+
+  useEffect(()=>{
+    getHomeBooks()
+  },[])
 
   const handleSearch=()=>{
     if(!searchKey){
@@ -25,6 +33,22 @@ function Home() {
       toast.error("Something went wrong!!!")
     }
   }
+
+  const getHomeBooks = async()=>{
+    const result = await getHomeBooksAPI()
+    if(result.status==200){
+      setHomeBooks(result.data)
+    }else{
+      console.log(result);
+      
+    }
+  }
+
+  console.log(homeBooks);
+  
+
+
+
 
 
 
@@ -90,18 +114,20 @@ function Home() {
 
         <div className="flex justify-center gap-12 flex-wrap">
 
-          <div className="w-64 border shadow-sm p-4">
+          {homeBooks?.length>0?homeBooks?.map(book=>(<div key={book?._id} className="w-64 border shadow-sm p-4">
             <img
-              src="https://images.unsplash.com/photo-1512820790803-83ca734da794"
+              src={book?.imageUrl}
               alt="book"
               className="w-full h-64 object-cover mb-4"
             />
-            <p className="text-blue-700 text-sm">demo...</p>
-            <p className="text-gray-700 text-sm">demo...</p>
-            <p className="text-gray-900 text-sm">$200</p>
+            <p className="text-blue-700 text-sm">{book?.author}</p>
+            <p className="text-gray-700 text-sm">{book?.title}</p>
+            <p className="text-gray-900 text-sm">Discount Price:{book?.discountPrice}</p>
           </div>
+          )):<p className="font-bold">Loading...</p>}
 
-          <div className="w-64 border shadow-sm p-4">
+
+          {/* <div className="w-64 border shadow-sm p-4">
             <img
               src="https://plus.unsplash.com/premium_photo-1677187301535-b46cec7b2cc8?q=80&w=1223&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="book"
@@ -110,9 +136,9 @@ function Home() {
             <p className="text-blue-700 text-sm">d...</p>
             <p className="text-gray-700 text-sm">dge...</p>
             <p className="text-gray-900 text-sm">$9</p>
-          </div>
+          </div> */}
 
-          <div className="w-64 border shadow-sm p-4">
+          {/* <div className="w-64 border shadow-sm p-4">
             <img
               src="https://plus.unsplash.com/premium_photo-1669652639337-c513cc42ead6?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="book"
@@ -121,9 +147,9 @@ function Home() {
             <p className="text-blue-700 text-sm">nn...</p>
             <p className="text-gray-700 text-sm">Long Walk to Freedom...</p>
             <p className="text-gray-900 text-sm">$200</p>
-          </div>
+          </div> */}
 
-          <div className="w-64 border shadow-sm p-4">
+          {/* <div className="w-64 border shadow-sm p-4">
             <img
               src="https://images.unsplash.com/photo-1524578271613-d550eacf6090"
               alt="book"
@@ -132,7 +158,7 @@ function Home() {
             <p className="text-blue-700 text-sm">ed...</p>
             <p className="text-gray-700 text-sm">j...</p>
             <p className="text-gray-900 text-sm">$23</p>
-          </div>
+          </div> */}
 
         </div>
 
