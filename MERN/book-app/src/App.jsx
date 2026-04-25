@@ -10,11 +10,16 @@ import Adminhome from './Admin/pages/Adminhome'
 import Admincollection from './Admin/pages/Admincollection'
 import Adminprofile from './Admin/pages/Adminprofile'
 import Preloader from './components/Preloader'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import Paymentsuccess from './user/pages/Paymentsuccess'
+import Paymenterror from './user/pages/Paymenterror'
+import { routeGuardContext } from './ContextAPI/AuthContext'
+import Pnf from './pages/Pnf'
 
 function App() {
 
   const[loader,setLoader]=useState(true)
+  const{role,authorized,setAuthorized}=useContext(routeGuardContext)
 
   setTimeout(()=>{
     setLoader(false)
@@ -32,14 +37,29 @@ function App() {
       <Route path='/register' element={<Auth register/>}/>
 
       {/* user */}
+      {
+     role=="user"&& 
+      <>
       <Route path='/profile' element={<Profile/>}/>
       <Route path='/view/:id' element={<Viewbook/>}/>
+      <Route path='/payment-success' element={<Paymentsuccess/>}/>
+      <Route path='/payment-failed' element={<Paymenterror/>}/>
+      </>
+      }
+
+
 
       {/* admin */}
+
+      { role=="admin"&&
+      <>
       <Route path='/admin/home' element={<Adminhome/>}/>
       <Route path='/admin/collection' element={<Admincollection/>}/>
       <Route path='/admin/profile' element={<Adminprofile/>}/>
+      </>
+      }
 
+      <Route path='/*' element={<Pnf/>} />
     </Routes>
     </>
   )

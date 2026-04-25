@@ -103,5 +103,20 @@ exports.editUserController = async(req,res)=>{
         
     }
     
+}
+
+
+
+// getAllUsers-admin
+exports.getAllUsersController = async(req,res)=>{
+    console.log("inside get AllUsers Controller");
+    try{
+        const allUsers = await users.find({role:{$ne:'admin'}})
+        res.status(200).json(allUsers)
+    }catch(error){
+        console.log(error);
+        res.status(500).json(error)
+    }
     
 }
+

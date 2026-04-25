@@ -3,7 +3,7 @@ import Header from '../components/Header'
 import { FaPlus, FaUserCircle } from 'react-icons/fa'
 import Edit from '../components/Edit'
 import { toast, ToastContainer } from 'react-toastify'
-import { addBookAPI, getUserProfileBooksAPI, getUserPurchasedAPI } from '../../../services/allAPI'
+import { addBookAPI, getUserProfileBooksAPI, getUserPurchasedAPI, removeBooksAPI } from '../../../services/allAPI'
 import { server_url } from '../../../services/server_url'
 
 
@@ -13,8 +13,8 @@ function Profile() {
   const [username, setUsername] = useState("")
   const [dp, setDp] = useState("")
   const [userBooks, setUserBooks] = useState([])
-  const[purchaseBooks,setPurchaseBooks] = useState([])
- 
+  const [purchaseBooks, setPurchaseBooks] = useState([])
+
 
 
   useEffect(() => {
@@ -143,6 +143,26 @@ function Profile() {
   }
 
 
+  const removeBooks = async (id) => {
+
+    const token = sessionStorage.getItem("token")
+    if (token) {
+      const reqHeader = {
+        "Authorization": `Bearer ${token}`
+      }
+      const result = await removeBooksAPI(id, reqHeader)
+      if (result.status == 200) {
+        toast.success("book details deleted")
+        getUserBooks()
+      } else {
+        console.log(result);
+      }
+    }
+  }
+
+
+
+
 
 
 
@@ -155,7 +175,7 @@ function Profile() {
       <div style={{ height: '200px' }} className='bg-black'></div>
       {/* section */}
       <div style={{ width: '230px', height: '230px', borderRadius: '50%', marginLeft: '70px', marginTop: '-130px' }} className='bg-white p-3'>
-        <img style={{ width: '200px', height: '200px', borderRadius: '50%' }} src={dp=="" ? "https://cdn-icons-png.flaticon.com/512/149/149071.png":dp.startsWith('https://lh3.googleusercontent.com/')?dp:`${server_url}/uploads/${dp}`} alt="profile" />
+        <img style={{ width: '200px', height: '200px', borderRadius: '50%' }} src={dp == "" ? "https://cdn-icons-png.flaticon.com/512/149/149071.png" : dp.startsWith('https://lh3.googleusercontent.com/') ? dp : `${server_url}/uploads/${dp}`} alt="profile" />
       </div>
       {/* section */}
       <div className='md:flex justify-between px-20 mt-5'>
@@ -276,7 +296,7 @@ function Profile() {
               <div className='px-4 mt-4 md:mt-0'>
                 <img className='w-full' src={book?.imageUrl} alt="book" />
                 <div className='mt-4 flex justify-end'>
-                  <button className='py-2 px-3 rounded bg-red-600 text-white ms-3 hover:bg-white hover:border hover:text-red-600 hover:border-red-600'>Delete</button>
+                  <button onClick={()=>removeBooks(book?._id)} className='py-2 px-3 rounded bg-red-600 text-white ms-3 hover:bg-white hover:border hover:text-red-600 hover:border-red-600'>Delete</button>
                 </div>
               </div>
             </div>
@@ -292,7 +312,7 @@ function Profile() {
         purchaseStatus &&
         <div className='p-10 my-20 shadow rounded'>
           {/* duplicate div according to book */}
-          {purchaseBooks?.length>0?purchaseBooks?.map(book=>(<div className='p-5 rounded mt-4 bg-gray-100'>
+          {purchaseBooks?.length > 0 ? purchaseBooks?.map(book => (<div className='p-5 rounded mt-4 bg-gray-100'>
             <div className='md:grid grid-cols-[3fr_1fr]'>
               <div className='px-4'>
                 <h1 className='text-2xl'>{book.title}</h1>
@@ -308,7 +328,7 @@ function Profile() {
               </div>
             </div>
           </div>
-          )):<p>No books purchased yet</p>}
+          )) : <p>No books purchased yet</p>}
 
         </div>
 

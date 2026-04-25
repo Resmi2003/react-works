@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { FaEye, FaCamera, FaTimes, FaArrowLeft } from "react-icons/fa";
 import Header from "../components/Header";
 import { useParams } from "react-router-dom";
-import { viewBookAPI } from "../../../services/allAPI";
+import { makePaymentAPI, viewBookAPI } from "../../../services/allAPI";
 import { server_url } from "../../../services/server_url";
+import {loadStripe} from '@stripe/stripe-js';
+
 
 function Viewbook() {
   const [showModal, setShowModal] = useState(false);
@@ -32,8 +34,25 @@ function Viewbook() {
     }
   }
 
-  console.log(book);
-  
+  // console.log(book);
+
+   const makePayment = async()=>{
+      const stripe = await loadStripe('pk_test_51TPFpCCwwHo3qVuHz3oBS6PohYq5mx2gz6H96XTx3ctFjKnkplzJ5j7LES8Zw6eaascpnb39GzZTsIpDVqZ7DdG600QxsOriu1');
+      // console.log(stripe);
+      const token = sessionStorage.getItem("token")
+    if(token){
+      const reqHeader = {
+        "Authorization": `Bearer ${token}`
+      }
+      const result = await makePaymentAPI(id,reqHeader)
+      console.log(result.data);
+      const {checkOutURL}=result.data
+      window.location.href=checkOutURL
+
+    }else{
+      console.log("error");
+    }
+  }  
 
   return (
      
@@ -91,7 +110,7 @@ function Viewbook() {
               Back
             </button>
 
-            <button className="bg-green-600 text-white px-4 py-2 rounded">
+            <button onClick={makePayment} className="bg-green-600 text-white px-4 py-2 rounded">
               Buy ₹ 23
             </button>
           </div>
@@ -133,7 +152,7 @@ function Viewbook() {
             {/* duplicate images */}
               <div className="flex gap-3">
 
-                { book?.uploadImg?.length>0?book.uploadImg.map((index,filename)=>(<img key={index} 
+                { book?.uploadImg?.length>0?book.uploadImg.map((filename,index)=>(<img key={index} 
                   src={`${server_url}/uploads/${filename}`}
                   className="w-1/2 h-44 object-cover rounded"
                   alt="book images"

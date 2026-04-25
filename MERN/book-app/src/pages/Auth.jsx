@@ -58,7 +58,7 @@ function Auth({ register }) {
         sessionStorage.setItem("user", JSON.stringify(result.data.user))
         setUserDetails({ email: "", password: "" })
         setTimeout(() => {
-          if (result.data.role == "admin") {
+          if (result.data.user.role == "admin") {
             navigate('/admin/home')
           } else {
             navigate('/')
